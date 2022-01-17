@@ -1,0 +1,22 @@
+{
+    "name": "micro/kernel-app",
+    "description": "Micro Framework: App Kernel component",
+    "type": "library",
+    "version": "0.1",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Micro\\Kernel\\App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Stanislau.Komar",
+            "email": "stanislau_komar@epam.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "micro/kernel": "*"
+    }
+}
