@@ -15,6 +15,7 @@ class AppCreateEventRunSuccess extends AbstractEmitEventProcessor
     protected function createEvent(AppKernelInterface $appKernel): EventInterface
     {
         return new ApplicationReadyEvent(
+            $appKernel,
             $appKernel->environment()
         );
     }

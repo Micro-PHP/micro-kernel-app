@@ -7,6 +7,8 @@ use Micro\Component\DependencyInjection\Container;
 use Micro\Component\EventEmitter\ListenerProviderInterface;
 use Micro\Kernel\App\Business\Processor\AppCreateEventRunSuccess;
 use Micro\Kernel\App\Business\Processor\PluginEventsListenerRegistration;
+use Micro\Kernel\App\Business\Processor\ProvideKernelProcessor;
+use Micro\Plugin\EventEmitter\EventsFacadeInterface;
 
 class KernelRunActionProcessor extends AbstractActionProcessor
 {
@@ -23,6 +25,7 @@ class KernelRunActionProcessor extends AbstractActionProcessor
     protected function createActionProcessorCollection(): array
     {
         return [
+            $this->createProvideKernelProcessor(),
             $this->createPluginEventsListenerRegistration(),
             $this->createAppCreateEventRunSuccess(),
         ];
@@ -41,8 +44,16 @@ class KernelRunActionProcessor extends AbstractActionProcessor
      */
     protected function createPluginEventsListenerRegistration(): KernelActionProcessorInterface
     {
-        $listenerProvider = $this->container->get(ListenerProviderInterface::class);
+        $listenerProvider = $this->container->get(EventsFacadeInterface::class);
 
         return new PluginEventsListenerRegistration($listenerProvider);
+    }
+
+    /**
+     * @return KernelActionProcessorInterface
+     */
+    protected function createProvideKernelProcessor(): KernelActionProcessorInterface
+    {
+        return new ProvideKernelProcessor();
     }
 }

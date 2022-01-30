@@ -8,6 +8,7 @@ use Micro\Framework\Kernel\Plugin\ApplicationPluginInterface;
 use Micro\Kernel\App\AppKernelInterface;
 use Micro\Kernel\App\Business\ApplicationListenerProviderPluginInterface;
 use Micro\Kernel\App\Business\KernelActionProcessorInterface;
+use Micro\Plugin\EventEmitter\EventsFacadeInterface;
 
 
 class PluginEventsListenerRegistration implements KernelActionProcessorInterface
@@ -15,7 +16,7 @@ class PluginEventsListenerRegistration implements KernelActionProcessorInterface
     /**
      * @param ListenerProviderInterface $listenerProvider
      */
-    public function __construct(private ListenerProviderInterface $listenerProvider)
+    public function __construct(private EventsFacadeInterface $eventsFacade)
     {
     }
 
@@ -29,7 +30,7 @@ class PluginEventsListenerRegistration implements KernelActionProcessorInterface
                 continue;
             }
 
-            $this->registerPluginListeners($plugin);
+            $this->registerPluginListenerProvider($plugin);
         }
     }
 
@@ -38,24 +39,13 @@ class PluginEventsListenerRegistration implements KernelActionProcessorInterface
      *
      * @param ApplicationListenerProviderPluginInterface $applicationPlugin
      */
-    public function registerPluginListeners(ApplicationPluginInterface $applicationPlugin): void
+    public function registerPluginListenerProvider(ApplicationPluginInterface $applicationPlugin): void
     {
-        foreach ($applicationPlugin->provideEventListeners() as $listener) {
-            $this->registerListener($listener);
-        }
+        $this->eventsFacade->addProvider($applicationPlugin->getEventListenerProvider());
     }
 
     /**
-     * @param EventListenerInterface $listener
-     * @return void
-     */
-    protected function registerListener(EventListenerInterface $listener): void
-    {
-        $this->listenerProvider->registerListener($listener);
-    }
-
-    /**
-     * @param ApplicationPluginInterface $applicationPlugin
+     * @param  ApplicationPluginInterface $applicationPlugin
      * @return bool
      */
     protected function supports(ApplicationPluginInterface $applicationPlugin): bool
