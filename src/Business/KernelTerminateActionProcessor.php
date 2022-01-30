@@ -2,6 +2,7 @@
 
 namespace Micro\Kernel\App\Business;
 
+use Micro\Kernel\App\AppKernelInterface;
 use Micro\Kernel\App\Business\Processor\AppCreateEventTerminate;
 
 class KernelTerminateActionProcessor extends AbstractActionProcessor

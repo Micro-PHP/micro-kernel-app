@@ -27,13 +27,13 @@ class AppKernel implements AppKernelInterface
 
     /**
      * @param ApplicationConfigurationInterface $configuration
-     * @param array $plugins
-     * @param string $environment
+     * @param array                             $plugins
+     * @param string                            $environment
      */
     public function __construct(
-        private ApplicationConfigurationInterface $configuration,
-        private array $plugins,
-        private string $environment = 'dev'
+    private ApplicationConfigurationInterface $configuration,
+    private array $plugins,
+    private string $environment = 'dev'
     ) {
         $this->container = $this->createApplicationContainerFactory()->create();
         $this->kernel = $this->createKernel();
@@ -70,9 +70,9 @@ class AppKernel implements AppKernelInterface
      */
     public function terminate(): void
     {
-        $this->kernel->terminate();
-
         $this->createTerminateActionProcessor()->process($this);
+
+        $this->kernel->terminate();
     }
 
     /**
@@ -81,6 +81,14 @@ class AppKernel implements AppKernelInterface
     public function environment(): string
     {
         return $this->environment;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isDevMode(): bool
+    {
+        return $this->environment() === 'dev';
     }
 
     /**

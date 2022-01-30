@@ -6,4 +6,5 @@ use Micro\Component\EventEmitter\EventInterface;
 
 class ApplicationTerminatedEvent implements EventInterface
 {
+
 }

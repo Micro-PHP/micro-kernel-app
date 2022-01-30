@@ -8,7 +8,7 @@ use Micro\Kernel\App\AppKernelInterface;
 interface KernelActionProcessorInterface
 {
     /**
-     * @param AppKernelInterface $appKernel
+     * @param  AppKernelInterface $appKernel
      * @return void
      */
     public function process(AppKernelInterface $appKernel): void;

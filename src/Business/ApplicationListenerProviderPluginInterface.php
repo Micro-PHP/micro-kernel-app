@@ -2,12 +2,12 @@
 
 namespace Micro\Kernel\App\Business;
 
-use Micro\Component\DependencyInjection\Container;
+use Micro\Component\EventEmitter\ListenerProviderInterface;
 
 interface ApplicationListenerProviderPluginInterface
 {
     /**
-     * @return array
+     * @return ListenerProviderInterface
      */
-    public function provideEventListeners(): array;
+    public function getEventListenerProvider(): ListenerProviderInterface;
 }
