@@ -15,8 +15,7 @@
             "email": "stanislau_komar@epam.com"
         }
     ],
-    "minimum-stability": "stable",
     "require": {
-        "micro/kernel": "*"
+        "micro/kernel": "^0.1"
     }
 }
