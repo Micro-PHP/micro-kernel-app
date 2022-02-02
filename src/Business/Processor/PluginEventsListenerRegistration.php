@@ -13,7 +13,7 @@ use Micro\Plugin\EventEmitter\EventsFacadeInterface;
 class PluginEventsListenerRegistration implements KernelActionProcessorInterface
 {
     /**
-     * @param ListenerProviderInterface $listenerProvider
+     * @param EventsFacadeInterface $eventsFacade
      */
     public function __construct(private EventsFacadeInterface $eventsFacade)
     {
@@ -28,7 +28,7 @@ class PluginEventsListenerRegistration implements KernelActionProcessorInterface
             if($this->supports($plugin) === false) {
                 continue;
             }
-
+            /** @var ApplicationListenerProviderPluginInterface $plugin */
             $this->registerPluginListenerProvider($plugin);
         }
     }
@@ -38,7 +38,7 @@ class PluginEventsListenerRegistration implements KernelActionProcessorInterface
      *
      * @param ApplicationListenerProviderPluginInterface $applicationPlugin
      */
-    public function registerPluginListenerProvider(ApplicationPluginInterface $applicationPlugin): void
+    public function registerPluginListenerProvider(ApplicationListenerProviderPluginInterface $applicationPlugin): void
     {
         $this->eventsFacade->addProvider($applicationPlugin->getEventListenerProvider());
     }
