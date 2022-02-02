@@ -8,9 +8,10 @@ use Micro\Kernel\App\AppKernelInterface;
 class ApplicationReadyEvent implements EventInterface
 {
     /**
-     * @param $environment
+     * @param AppKernelInterface $appKernel
+     * @param string $environment
      */
-    public function __construct(private AppKernelInterface $appKernel, private $environment)
+    public function __construct(private AppKernelInterface $appKernel, private string $environment)
     {
     }
 
