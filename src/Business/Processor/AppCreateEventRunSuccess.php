@@ -2,7 +2,6 @@
 
 namespace Micro\Kernel\App\Business\Processor;
 
-
 use Micro\Component\EventEmitter\EventInterface;
 use Micro\Kernel\App\AppKernelInterface;
 use Micro\Kernel\App\Business\Event\ApplicationReadyEvent;

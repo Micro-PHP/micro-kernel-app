@@ -2,7 +2,6 @@
 
 namespace Micro\Kernel\App\Business;
 
-
 use Micro\Component\DependencyInjection\Container;
 use Micro\Component\EventEmitter\ListenerProviderInterface;
 use Micro\Kernel\App\Business\Processor\AppCreateEventRunSuccess;

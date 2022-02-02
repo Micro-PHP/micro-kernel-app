@@ -34,9 +34,10 @@ class AppKernel implements AppKernelInterface
     private ApplicationConfigurationInterface $configuration,
     private array $plugins,
     private string $environment = 'dev'
-    ) {
+    )
+    {
         $this->container = $this->createApplicationContainerFactory()->create();
-        $this->kernel = $this->createKernel();
+        $this->kernel    = $this->createKernel();
     }
 
     /**

@@ -10,7 +10,6 @@ use Micro\Kernel\App\Business\ApplicationListenerProviderPluginInterface;
 use Micro\Kernel\App\Business\KernelActionProcessorInterface;
 use Micro\Plugin\EventEmitter\EventsFacadeInterface;
 
-
 class PluginEventsListenerRegistration implements KernelActionProcessorInterface
 {
     /**
