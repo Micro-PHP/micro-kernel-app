@@ -51,9 +51,9 @@ class AppKernel implements AppKernelInterface
     /**
      * {@inheritDoc}
      */
-    public function plugins(): array
+    public function plugins(string $interfaceInherited = null): iterable
     {
-        return $this->kernel->plugins();
+        return $this->kernel->plugins($interfaceInherited);
     }
 
     /**
