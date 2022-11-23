@@ -16,6 +16,8 @@
         }
     ],
     "require": {
-        "micro/kernel": "^0.1"
+        "micro/kernel": "^0.1",
+        "micro/plugin-event-emitter": "^0.1",
+        "micro/dependency-injection": "^0.1"
     }
 }
