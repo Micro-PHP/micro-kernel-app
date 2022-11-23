@@ -2,12 +2,11 @@
 
 namespace Micro\Kernel\App\Business\Processor;
 
-use Micro\Component\EventEmitter\EventListenerInterface;
-use Micro\Component\EventEmitter\ListenerProviderInterface;
+
 use Micro\Framework\Kernel\Plugin\ApplicationPluginInterface;
 use Micro\Kernel\App\AppKernelInterface;
-use Micro\Kernel\App\Business\ApplicationListenerProviderPluginInterface;
 use Micro\Kernel\App\Business\KernelActionProcessorInterface;
+use Micro\Kernel\App\Listener\ApplicationListenerProviderPluginInterface;
 use Micro\Plugin\EventEmitter\EventsFacadeInterface;
 
 class PluginEventsListenerRegistration implements KernelActionProcessorInterface

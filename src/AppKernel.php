@@ -8,7 +8,8 @@ use Micro\Framework\Kernel\Container\ApplicationContainerFactoryInterface;
 use Micro\Framework\Kernel\Container\Impl\ApplicationContainerFactory;
 use Micro\Framework\Kernel\KernelBuilder;
 use Micro\Framework\Kernel\KernelInterface;
-use Micro\Framework\Kernel\Plugin\BootLoader\ProvideDependenciesBootLoader;
+use Micro\Framework\Kernel\Plugin\PluginBootLoaderInterface;
+use Micro\Kernel\App\Business\Boot\Dependency\ProvideDependenciesBootLoader;
 use Micro\Kernel\App\Business\KernelActionProcessorInterface;
 use Micro\Kernel\App\Business\KernelRunActionProcessor;
 use Micro\Kernel\App\Business\KernelTerminateActionProcessor;
@@ -62,7 +63,6 @@ class AppKernel implements AppKernelInterface
     public function run(): void
     {
         $this->kernel->run();
-
         $this->createInitActionProcessor()->process($this);
     }
 
@@ -135,7 +135,7 @@ class AppKernel implements AppKernelInterface
     }
 
     /**
-     * @return ProvideDependenciesBootLoader[]
+     * @return PluginBootLoaderInterface[]
      */
     protected function createBootLoaderCollection(): array
     {

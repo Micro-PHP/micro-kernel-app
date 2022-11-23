@@ -1,6 +1,6 @@
 <?php
 
-namespace Micro\Kernel\App\Business;
+namespace Micro\Kernel\App\Listener;
 
 use Micro\Component\EventEmitter\ListenerProviderInterface;
 
