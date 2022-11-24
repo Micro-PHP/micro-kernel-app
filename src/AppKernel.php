@@ -3,13 +3,15 @@
 namespace Micro\Kernel\App;
 
 use Micro\Component\DependencyInjection\Container;
+use Micro\Framework\Kernel\Boot\ConfigurationProviderBootLoader;
+use Micro\Framework\Kernel\Boot\DependencyProviderBootLoader;
+use Micro\Framework\Kernel\Configuration\ApplicationConfigurationFactoryInterface;
 use Micro\Framework\Kernel\Configuration\ApplicationConfigurationInterface;
 use Micro\Framework\Kernel\Container\ApplicationContainerFactoryInterface;
 use Micro\Framework\Kernel\Container\Impl\ApplicationContainerFactory;
 use Micro\Framework\Kernel\KernelBuilder;
 use Micro\Framework\Kernel\KernelInterface;
 use Micro\Framework\Kernel\Plugin\PluginBootLoaderInterface;
-use Micro\Kernel\App\Business\Boot\Dependency\ProvideDependenciesBootLoader;
 use Micro\Kernel\App\Business\KernelActionProcessorInterface;
 use Micro\Kernel\App\Business\KernelRunActionProcessor;
 use Micro\Kernel\App\Business\KernelTerminateActionProcessor;
@@ -17,28 +19,40 @@ use Micro\Kernel\App\Business\KernelTerminateActionProcessor;
 class AppKernel implements AppKernelInterface
 {
     /**
-     * @var KernelInterface
+     * @var KernelInterface|null
      */
-    private KernelInterface $kernel;
+    private KernelInterface|null $kernel = null;
 
     /**
      * @var Container|null
      */
-    private ?Container $container;
+    private Container|null $container;
 
     /**
-     * @param ApplicationConfigurationInterface $configuration
-     * @param array                             $plugins
-     * @param string                            $environment
+     * @var iterable<PluginBootLoaderInterface>
+     */
+    private iterable $bootLoadersCustom = [];
+
+    /**
+     * @param iterable $plugins
+     * @param array|ApplicationConfigurationInterface|ApplicationConfigurationFactoryInterface $configuration
+     * @param string $environment
      */
     public function __construct(
-    private ApplicationConfigurationInterface $configuration,
-    private array $plugins,
-    private string $environment = 'dev'
+        private readonly iterable                                                                         $plugins,
+        private readonly array|ApplicationConfigurationInterface|ApplicationConfigurationFactoryInterface $configuration,
+        private readonly string                                                                           $environment = 'dev'
     )
     {
-        $this->container = $this->createApplicationContainerFactory()->create();
-        $this->kernel    = $this->createKernel();
+        $container = $this
+            ->createApplicationContainerFactory()
+            ->create();
+
+        if(!($container instanceof Container)) {
+            throw new \RuntimeException(sprintf('Temporary exception. Container should be %s instance object', Container::class));
+        }
+
+        $this->container = $container;
     }
 
     /**
@@ -46,7 +60,7 @@ class AppKernel implements AppKernelInterface
      */
     public function container(): Container
     {
-        return $this->kernel->container();
+        return $this->createKernel()->container();
     }
 
     /**
@@ -54,7 +68,9 @@ class AppKernel implements AppKernelInterface
      */
     public function plugins(string $interfaceInherited = null): iterable
     {
-        return $this->kernel->plugins($interfaceInherited);
+        return $this
+            ->createKernel()
+            ->plugins($interfaceInherited);
     }
 
     /**
@@ -62,8 +78,13 @@ class AppKernel implements AppKernelInterface
      */
     public function run(): void
     {
-        $this->kernel->run();
-        $this->createInitActionProcessor()->process($this);
+        $this
+            ->createKernel()
+            ->run();
+
+        $this
+            ->createInitActionProcessor()
+            ->process($this);
     }
 
     /**
@@ -71,7 +92,9 @@ class AppKernel implements AppKernelInterface
      */
     public function terminate(): void
     {
-        $this->createTerminateActionProcessor()->process($this);
+        $this
+            ->createTerminateActionProcessor()
+            ->process($this);
 
         $this->kernel->terminate();
     }
@@ -97,17 +120,20 @@ class AppKernel implements AppKernelInterface
      */
     protected function createKernel(): KernelInterface
     {
+        if($this->kernel !== null) {
+            return $this->kernel;
+        }
+
         $kernel = $this
             ->createKernelBuilder()
-            ->setApplicationConfiguration($this->configuration)
-            ->setBootLoaders($this->createBootLoaderCollection())
+            ->addBootLoaders($this->createBootLoaderCollection())
             ->setContainer($this->container)
             ->setApplicationPlugins($this->plugins)
             ->build();
 
-        $this->container = null;
+        $this->kernel = $kernel;
 
-        return $kernel;
+        return $this->kernel;
     }
 
     /**
@@ -119,14 +145,18 @@ class AppKernel implements AppKernelInterface
     }
 
     /**
+     * @deprecated
+     *
      * @return KernelActionProcessorInterface
      */
     protected function createInitActionProcessor(): KernelActionProcessorInterface
     {
-        return new KernelRunActionProcessor($this->container());
+        return new KernelRunActionProcessor();
     }
 
     /**
+     * @deprecated
+     *
      * @return KernelActionProcessorInterface
      */
     protected function createTerminateActionProcessor(): KernelActionProcessorInterface
@@ -140,8 +170,22 @@ class AppKernel implements AppKernelInterface
     protected function createBootLoaderCollection(): array
     {
         return [
-            new ProvideDependenciesBootLoader($this->container),
+            new DependencyProviderBootLoader($this->container),
+            new ConfigurationProviderBootLoader($this->configuration),
+            ...$this->bootLoadersCustom
         ];
+    }
+
+    /**
+     * @param PluginBootLoaderInterface $pluginBootLoader
+     *
+     * @return $this
+     */
+    public function addBootLoader(PluginBootLoaderInterface $pluginBootLoader): self
+    {
+        $this->bootLoadersCustom[] = $pluginBootLoader;
+
+        return $this;
     }
 
     /**

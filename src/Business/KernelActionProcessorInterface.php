@@ -5,6 +5,9 @@ namespace Micro\Kernel\App\Business;
 use Micro\Framework\Kernel\KernelInterface;
 use Micro\Kernel\App\AppKernelInterface;
 
+/**
+ * @deprecated
+ */
 interface KernelActionProcessorInterface
 {
     /**

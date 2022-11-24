@@ -9,15 +9,11 @@ use Micro\Kernel\App\Business\Processor\PluginEventsListenerRegistration;
 use Micro\Kernel\App\Business\Processor\ProvideKernelProcessor;
 use Micro\Plugin\EventEmitter\EventsFacadeInterface;
 
+/**
+ * @deprecated
+ */
 class KernelRunActionProcessor extends AbstractActionProcessor
 {
-    /**
-     * @param Container $container
-     */
-    public function __construct(private Container $container)
-    {
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -25,29 +21,8 @@ class KernelRunActionProcessor extends AbstractActionProcessor
     {
         return [
             $this->createProvideKernelProcessor(),
-            $this->createPluginEventsListenerRegistration(),
-            $this->createAppCreateEventRunSuccess(),
         ];
     }
-
-    /**
-     * @return KernelActionProcessorInterface
-     */
-    protected function createAppCreateEventRunSuccess(): KernelActionProcessorInterface
-    {
-        return new AppCreateEventRunSuccess();
-    }
-
-    /**
-     * @return KernelActionProcessorInterface
-     */
-    protected function createPluginEventsListenerRegistration(): KernelActionProcessorInterface
-    {
-        $listenerProvider = $this->container->get(EventsFacadeInterface::class);
-
-        return new PluginEventsListenerRegistration($listenerProvider);
-    }
-
     /**
      * @return KernelActionProcessorInterface
      */

@@ -4,6 +4,9 @@ namespace Micro\Kernel\App\Business;
 
 use Micro\Kernel\App\AppKernelInterface;
 
+/**
+ * @deprecated
+ */
 abstract class AbstractActionProcessor implements KernelActionProcessorInterface
 {
     /**

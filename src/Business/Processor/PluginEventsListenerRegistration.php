@@ -9,6 +9,9 @@ use Micro\Kernel\App\Business\KernelActionProcessorInterface;
 use Micro\Kernel\App\Listener\ApplicationListenerProviderPluginInterface;
 use Micro\Plugin\EventEmitter\EventsFacadeInterface;
 
+/**
+ * @deprecated
+ */
 class PluginEventsListenerRegistration implements KernelActionProcessorInterface
 {
     /**

@@ -8,6 +8,9 @@ use Micro\Kernel\App\AppKernelInterface;
 use Micro\Kernel\App\Business\KernelActionProcessorInterface;
 use Micro\Plugin\EventEmitter\EventsFacadeInterface;
 
+/**
+ * @deprecated
+ */
 abstract class AbstractEmitEventProcessor implements KernelActionProcessorInterface
 {
     /**
@@ -17,7 +20,9 @@ abstract class AbstractEmitEventProcessor implements KernelActionProcessorInterf
     {
         $event = $this->createEvent($appKernel);
 
-        $this->lookupEventEmitter($appKernel->container())->emit($event);
+        $this->lookupEventEmitter(
+            $appKernel->container()
+        )->emit($event);
     }
 
     /**

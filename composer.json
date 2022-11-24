@@ -2,7 +2,7 @@
     "name": "micro/kernel-app",
     "description": "Micro Framework: App Kernel component",
     "type": "library",
-    "version": "0.1",
+    "version": "2.0",
     "license": "MIT",
     "autoload": {
         "psr-4": {
@@ -16,7 +16,9 @@
         }
     ],
     "require": {
-        "micro/kernel": "^0.1|^1",
-        "micro/autowire": "^0.1|^1"
+        "micro/kernel": "^1",
+        "micro/plugin-event-emitter": "^1",
+        "micro/kernel-boot-dependency": "^1",
+        "micro/kernel-boot-configuration": "^1"
     }
 }

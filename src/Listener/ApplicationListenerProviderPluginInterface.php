@@ -4,6 +4,9 @@ namespace Micro\Kernel\App\Listener;
 
 use Micro\Component\EventEmitter\ListenerProviderInterface;
 
+/**
+ * @deprecated
+ */
 interface ApplicationListenerProviderPluginInterface
 {
     /**

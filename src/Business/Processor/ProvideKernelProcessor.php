@@ -5,6 +5,9 @@ namespace Micro\Kernel\App\Business\Processor;
 use Micro\Kernel\App\AppKernelInterface;
 use Micro\Kernel\App\Business\KernelActionProcessorInterface;
 
+/**
+ * @deprecated
+ */
 class ProvideKernelProcessor implements KernelActionProcessorInterface
 {
     /**
