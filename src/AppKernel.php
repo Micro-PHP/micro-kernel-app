@@ -3,15 +3,19 @@
 namespace Micro\Kernel\App;
 
 use Micro\Component\DependencyInjection\Container;
+use Micro\Framework\Kernel\Boot\ConfigurationProviderBootLoader;
+use Micro\Framework\Kernel\Boot\DependencyProviderBootLoader;
 use Micro\Framework\Kernel\Configuration\ApplicationConfigurationInterface;
 use Micro\Framework\Kernel\Container\ApplicationContainerFactoryInterface;
 use Micro\Framework\Kernel\Container\Impl\ApplicationContainerFactory;
 use Micro\Framework\Kernel\KernelBuilder;
 use Micro\Framework\Kernel\KernelInterface;
-use Micro\Framework\Kernel\Plugin\BootLoader\ProvideDependenciesBootLoader;
+use Micro\Framework\Kernel\Plugin\PluginBootLoaderInterface;
 use Micro\Kernel\App\Business\KernelActionProcessorInterface;
 use Micro\Kernel\App\Business\KernelRunActionProcessor;
 use Micro\Kernel\App\Business\KernelTerminateActionProcessor;
+use Micro\Plugin\EventEmitter\EventEmitterPlugin;
+use Psr\Container\ContainerInterface;
 
 class AppKernel implements AppKernelInterface
 {
@@ -21,19 +25,24 @@ class AppKernel implements AppKernelInterface
     private KernelInterface $kernel;
 
     /**
-     * @var Container|null
+     * @var ContainerInterface|null
      */
-    private ?Container $container;
+    private ?ContainerInterface $container;
 
     /**
-     * @param ApplicationConfigurationInterface $configuration
-     * @param array                             $plugins
-     * @param string                            $environment
+     * @var PluginBootLoaderInterface[]
+     */
+    private iterable $additionalBootLoaders = [];
+
+    /**
+     * @param ApplicationConfigurationInterface|array $configuration
+     * @param array $plugins
+     * @param string $environment
      */
     public function __construct(
-    private ApplicationConfigurationInterface $configuration,
-    private array $plugins,
-    private string $environment = 'dev'
+        private ApplicationConfigurationInterface|array $configuration = [],
+        private array $plugins = [],
+        private readonly string $environment = 'dev'
     )
     {
         $this->container = $this->createApplicationContainerFactory()->create();
@@ -93,16 +102,32 @@ class AppKernel implements AppKernelInterface
     }
 
     /**
+     * @param PluginBootLoaderInterface $pluginBootLoader
+     *
+     * @return $this
+     */
+    public function addBootLoader(PluginBootLoaderInterface $pluginBootLoader): self
+    {
+        $this->additionalBootLoaders[] = $pluginBootLoader;
+
+        return $this;
+    }
+
+    /**
      * @return KernelInterface
      */
     protected function createKernel(): KernelInterface
     {
         $kernel = $this
             ->createKernelBuilder()
-            ->setApplicationConfiguration($this->configuration)
-            ->setBootLoaders($this->createBootLoaderCollection())
+            ->addBootLoaders($this->createBootLoaderCollection())
             ->setContainer($this->container)
-            ->setApplicationPlugins($this->plugins)
+            ->setApplicationPlugins(
+                [
+                    EventEmitterPlugin::class,
+                    ...$this->plugins
+                ]
+            )
             ->build();
 
         $this->container = null;
@@ -135,12 +160,17 @@ class AppKernel implements AppKernelInterface
     }
 
     /**
-     * @return ProvideDependenciesBootLoader[]
+     * @return PluginBootLoaderInterface[]
      */
     protected function createBootLoaderCollection(): array
     {
+        $bl = $this->additionalBootLoaders;
+        $this->additionalBootLoaders = [];
+
         return [
-            new ProvideDependenciesBootLoader($this->container),
+            new DependencyProviderBootLoader($this->container),
+            new ConfigurationProviderBootLoader($this->configuration),
+            ...$bl
         ];
     }
 

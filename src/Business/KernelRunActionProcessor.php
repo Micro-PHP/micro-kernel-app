@@ -2,22 +2,11 @@
 
 namespace Micro\Kernel\App\Business;
 
-use Micro\Component\DependencyInjection\Container;
-use Micro\Component\EventEmitter\ListenerProviderInterface;
 use Micro\Kernel\App\Business\Processor\AppCreateEventRunSuccess;
-use Micro\Kernel\App\Business\Processor\PluginEventsListenerRegistration;
 use Micro\Kernel\App\Business\Processor\ProvideKernelProcessor;
-use Micro\Plugin\EventEmitter\EventsFacadeInterface;
 
 class KernelRunActionProcessor extends AbstractActionProcessor
 {
-    /**
-     * @param Container $container
-     */
-    public function __construct(private Container $container)
-    {
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -25,7 +14,6 @@ class KernelRunActionProcessor extends AbstractActionProcessor
     {
         return [
             $this->createProvideKernelProcessor(),
-            $this->createPluginEventsListenerRegistration(),
             $this->createAppCreateEventRunSuccess(),
         ];
     }
@@ -36,16 +24,6 @@ class KernelRunActionProcessor extends AbstractActionProcessor
     protected function createAppCreateEventRunSuccess(): KernelActionProcessorInterface
     {
         return new AppCreateEventRunSuccess();
-    }
-
-    /**
-     * @return KernelActionProcessorInterface
-     */
-    protected function createPluginEventsListenerRegistration(): KernelActionProcessorInterface
-    {
-        $listenerProvider = $this->container->get(EventsFacadeInterface::class);
-
-        return new PluginEventsListenerRegistration($listenerProvider);
     }
 
     /**

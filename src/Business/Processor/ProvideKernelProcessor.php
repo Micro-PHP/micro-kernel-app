@@ -2,6 +2,7 @@
 
 namespace Micro\Kernel\App\Business\Processor;
 
+use Micro\Framework\Kernel\KernelInterface;
 use Micro\Kernel\App\AppKernelInterface;
 use Micro\Kernel\App\Business\KernelActionProcessorInterface;
 
@@ -13,8 +14,9 @@ class ProvideKernelProcessor implements KernelActionProcessorInterface
      */
     public function process(AppKernelInterface $appKernel): void
     {
-        $appKernel->container()->register(AppKernelInterface::class, function () use ($appKernel) {
-            return $appKernel;
-        });
+        $callback = fn() => $appKernel;
+
+        $appKernel->container()->register(AppKernelInterface::class, $callback);
+        $appKernel->container()->register(KernelInterface::class, $callback);
     }
 }

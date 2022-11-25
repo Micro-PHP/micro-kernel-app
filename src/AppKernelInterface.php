@@ -3,6 +3,7 @@
 namespace Micro\Kernel\App;
 
 use Micro\Framework\Kernel\KernelInterface;
+use Micro\Framework\Kernel\Plugin\PluginBootLoaderInterface;
 
 interface AppKernelInterface extends KernelInterface
 {
@@ -15,4 +16,11 @@ interface AppKernelInterface extends KernelInterface
      * @return bool
      */
     public function isDevMode(): bool;
+
+    /**
+     * @param PluginBootLoaderInterface $pluginBootLoader
+     *
+     * @return $this
+     */
+    public function addBootLoader(PluginBootLoaderInterface $pluginBootLoader): self;
 }
