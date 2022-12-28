@@ -4,6 +4,7 @@ namespace Micro\Kernel\App;
 
 use Micro\Component\DependencyInjection\Container;
 use Micro\Framework\Kernel\Boot\ConfigurationProviderBootLoader;
+use Micro\Framework\Kernel\Boot\DependedPluginsBootLoader;
 use Micro\Framework\Kernel\Boot\DependencyProviderBootLoader;
 use Micro\Framework\Kernel\Configuration\ApplicationConfigurationInterface;
 use Micro\Framework\Kernel\Container\ApplicationContainerFactoryInterface;
@@ -114,6 +115,14 @@ class AppKernel implements AppKernelInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function loadPlugin(string $applicationPluginClass): void
+    {
+        $this->kernel->loadPlugin($applicationPluginClass);
+    }
+
+    /**
      * @return KernelInterface
      */
     protected function createKernel(): KernelInterface
@@ -148,7 +157,7 @@ class AppKernel implements AppKernelInterface
      */
     protected function createInitActionProcessor(): KernelActionProcessorInterface
     {
-        return new KernelRunActionProcessor($this->container());
+        return new KernelRunActionProcessor();
     }
 
     /**
@@ -170,6 +179,7 @@ class AppKernel implements AppKernelInterface
         return [
             new DependencyProviderBootLoader($this->container),
             new ConfigurationProviderBootLoader($this->configuration),
+            new DependedPluginsBootLoader($this),
             ...$bl
         ];
     }
