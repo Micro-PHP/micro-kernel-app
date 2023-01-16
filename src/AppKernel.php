@@ -177,8 +177,8 @@ class AppKernel implements AppKernelInterface
         $this->additionalBootLoaders = [];
 
         return [
-            new DependencyProviderBootLoader($this->container),
             new ConfigurationProviderBootLoader($this->configuration),
+            new DependencyProviderBootLoader($this->container),
             new DependedPluginsBootLoader($this),
             ...$bl
         ];
