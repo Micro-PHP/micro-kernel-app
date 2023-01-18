@@ -1,5 +1,14 @@
 <?php
 
+/*
+ *  This file is part of the Micro framework package.
+ *
+ *  (c) Stanislau Komar <kost@micro-php.net>
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 namespace Micro\Kernel\App\Business\Processor;
 
 use Micro\Component\DependencyInjection\Container;
@@ -20,20 +29,14 @@ abstract class AbstractEmitEventProcessor implements KernelActionProcessorInterf
         $this->lookupEventEmitter($appKernel->container())->emit($event);
     }
 
-    /**
-     * @param  AppKernelInterface $appKernel
-     * @return EventInterface
-     */
     abstract protected function createEvent(AppKernelInterface $appKernel): EventInterface;
 
     /**
-     * @param Container $container
-     * @return EventsFacadeInterface
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     protected function lookupEventEmitter(Container $container): EventsFacadeInterface
     {
-        return $container->get(EventsFacadeInterface::class);
+        return $container->get(EventsFacadeInterface::class); // @phpstan-ignore-line
     }
 }
