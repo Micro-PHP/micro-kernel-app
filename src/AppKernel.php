@@ -1,5 +1,14 @@
 <?php
 
+/*
+ *  This file is part of the Micro framework package.
+ *
+ *  (c) Stanislau Komar <kost@micro-php.net>
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 namespace Micro\Kernel\App;
 
 use Micro\Component\DependencyInjection\Container;
@@ -7,8 +16,6 @@ use Micro\Framework\Kernel\Boot\ConfigurationProviderBootLoader;
 use Micro\Framework\Kernel\Boot\DependedPluginsBootLoader;
 use Micro\Framework\Kernel\Boot\DependencyProviderBootLoader;
 use Micro\Framework\Kernel\Configuration\ApplicationConfigurationInterface;
-use Micro\Framework\Kernel\Container\ApplicationContainerFactoryInterface;
-use Micro\Framework\Kernel\Container\Impl\ApplicationContainerFactory;
 use Micro\Framework\Kernel\KernelBuilder;
 use Micro\Framework\Kernel\KernelInterface;
 use Micro\Framework\Kernel\Plugin\PluginBootLoaderInterface;
@@ -16,38 +23,33 @@ use Micro\Kernel\App\Business\KernelActionProcessorInterface;
 use Micro\Kernel\App\Business\KernelRunActionProcessor;
 use Micro\Kernel\App\Business\KernelTerminateActionProcessor;
 use Micro\Plugin\EventEmitter\EventEmitterPlugin;
-use Psr\Container\ContainerInterface;
+use Micro\Plugin\Locator\LocatorPlugin;
 
 class AppKernel implements AppKernelInterface
 {
-    /**
-     * @var KernelInterface
-     */
-    private KernelInterface $kernel;
+    private bool $isTerminated;
 
-    /**
-     * @var ContainerInterface|null
-     */
-    private ?ContainerInterface $container;
+    private bool $isStarted;
+
+    private ?KernelInterface $kernel;
 
     /**
      * @var PluginBootLoaderInterface[]
      */
-    private iterable $additionalBootLoaders = [];
+    private array $additionalBootLoaders = [];
 
     /**
-     * @param ApplicationConfigurationInterface|array $configuration
-     * @param array $plugins
-     * @param string $environment
+     * @param ApplicationConfigurationInterface|array<string, string> $configuration
+     * @param class-string[]                                          $plugins
      */
     public function __construct(
-        private ApplicationConfigurationInterface|array $configuration = [],
+        private readonly ApplicationConfigurationInterface|array $configuration = [],
         private array $plugins = [],
         private readonly string $environment = 'dev'
-    )
-    {
-        $this->container = $this->createApplicationContainerFactory()->create();
-        $this->kernel    = $this->createKernel();
+    ) {
+        $this->kernel = null;
+        $this->isTerminated = false;
+        $this->isStarted = false;
     }
 
     /**
@@ -55,15 +57,15 @@ class AppKernel implements AppKernelInterface
      */
     public function container(): Container
     {
-        return $this->kernel->container();
+        return $this->kernel()->container();
     }
 
     /**
      * {@inheritDoc}
      */
-    public function plugins(string $interfaceInherited = null): iterable
+    public function plugins(string $interfaceInherited = null): \Traversable
     {
-        return $this->kernel->plugins($interfaceInherited);
+        return $this->kernel()->plugins($interfaceInherited);
     }
 
     /**
@@ -71,9 +73,17 @@ class AppKernel implements AppKernelInterface
      */
     public function run(): void
     {
+        if ($this->isStarted) {
+            return;
+        }
+
+        $this->kernel = $this->createKernel();
+
         $this->kernel->run();
 
         $this->createInitActionProcessor()->process($this);
+
+        $this->isStarted = true;
     }
 
     /**
@@ -81,9 +91,13 @@ class AppKernel implements AppKernelInterface
      */
     public function terminate(): void
     {
+        if ($this->isTerminated || !$this->isStarted) {
+            return;
+        }
+
         $this->createTerminateActionProcessor()->process($this);
 
-        $this->kernel->terminate();
+        $this->isTerminated = true;
     }
 
     /**
@@ -99,13 +113,11 @@ class AppKernel implements AppKernelInterface
      */
     public function isDevMode(): bool
     {
-        return $this->environment() === 'dev';
+        return str_starts_with($this->environment(), 'dev');
     }
 
     /**
-     * @param PluginBootLoaderInterface $pluginBootLoader
-     *
-     * @return $this
+     * {@inheritDoc}
      */
     public function addBootLoader(PluginBootLoaderInterface $pluginBootLoader): self
     {
@@ -119,50 +131,59 @@ class AppKernel implements AppKernelInterface
      */
     public function loadPlugin(string $applicationPluginClass): void
     {
-        $this->kernel->loadPlugin($applicationPluginClass);
+        $this->kernel()->loadPlugin($applicationPluginClass);
     }
 
-    /**
-     * @return KernelInterface
-     */
     protected function createKernel(): KernelInterface
     {
-        $kernel = $this
+        $container = new Container();
+        $plugins = $this->plugins;
+        $this->plugins = [];
+
+        return $this
             ->createKernelBuilder()
-            ->addBootLoaders($this->createBootLoaderCollection())
-            ->setContainer($this->container)
-            ->setApplicationPlugins(
-                [
+            ->setContainer($container)
+            ->addBootLoaders($this->createBootLoaderCollection($container))
+            ->setApplicationPlugins(array_unique([
                     EventEmitterPlugin::class,
-                    ...$this->plugins
-                ]
+                    LocatorPlugin::class,
+                    ...$plugins,
+                ])
             )
             ->build();
-
-        $this->container = null;
-
-        return $kernel;
     }
 
-    /**
-     * @return KernelBuilder
-     */
+    protected function kernel(): KernelInterface
+    {
+        if (!$this->kernel) {
+            $trace = debug_backtrace();
+            $caller = $trace[1];
+            /**
+             * @var string $cc
+             *
+             * @phpstan-ignore-next-line
+             *
+             * @psalm-suppress PossiblyUndefinedArrayOffset
+             */
+            $cc = $caller['class'];
+            $cm = $caller['function'];
+
+            throw new \RuntimeException(sprintf('Method %s::%s can not be called before %s::run() execution.', $cc, $cm, KernelInterface::class));
+        }
+
+        return $this->kernel;
+    }
+
     protected function createKernelBuilder(): KernelBuilder
     {
         return new KernelBuilder();
     }
 
-    /**
-     * @return KernelActionProcessorInterface
-     */
     protected function createInitActionProcessor(): KernelActionProcessorInterface
     {
         return new KernelRunActionProcessor();
     }
 
-    /**
-     * @return KernelActionProcessorInterface
-     */
     protected function createTerminateActionProcessor(): KernelActionProcessorInterface
     {
         return new KernelTerminateActionProcessor();
@@ -171,24 +192,17 @@ class AppKernel implements AppKernelInterface
     /**
      * @return PluginBootLoaderInterface[]
      */
-    protected function createBootLoaderCollection(): array
+    protected function createBootLoaderCollection(Container $container): array
     {
         $bl = $this->additionalBootLoaders;
+
         $this->additionalBootLoaders = [];
 
         return [
             new ConfigurationProviderBootLoader($this->configuration),
-            new DependencyProviderBootLoader($this->container),
+            new DependencyProviderBootLoader($container),
             new DependedPluginsBootLoader($this),
-            ...$bl
+            ...$bl,
         ];
-    }
-
-    /**
-     * @return ApplicationContainerFactoryInterface
-     */
-    protected function createApplicationContainerFactory(): ApplicationContainerFactoryInterface
-    {
-        return new ApplicationContainerFactory();
     }
 }
