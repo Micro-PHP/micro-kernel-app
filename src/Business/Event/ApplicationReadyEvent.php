@@ -11,10 +11,9 @@
 
 namespace Micro\Kernel\App\Business\Event;
 
-use Micro\Component\EventEmitter\EventInterface;
 use Micro\Kernel\App\AppKernelInterface;
 
-readonly class ApplicationReadyEvent implements EventInterface
+readonly class ApplicationReadyEvent implements ApplicationReadyEventInterface
 {
     public function __construct(private AppKernelInterface $appKernel, private string $environment)
     {
