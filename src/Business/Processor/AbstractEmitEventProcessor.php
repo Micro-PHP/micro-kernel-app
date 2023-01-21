@@ -34,9 +34,16 @@ abstract class AbstractEmitEventProcessor implements KernelActionProcessorInterf
     /**
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
+     *
+     * @psalm-suppress MoreSpecificReturnType
      */
     protected function lookupEventEmitter(Container $container): EventsFacadeInterface
     {
-        return $container->get(EventsFacadeInterface::class); // @phpstan-ignore-line
+        /**
+         * @psalm-suppress LessSpecificReturnStatement
+         *
+         * @phpstan-ignore-next-line
+         */
+        return $container->get(EventsFacadeInterface::class);
     }
 }

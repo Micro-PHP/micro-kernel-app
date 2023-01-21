@@ -15,6 +15,7 @@ return (new PhpCsFixer\Config())
         '@Symfony:risky' => true,
         'protected_to_private' => false,
         'semicolon_after_instruction' => false,
+        'phpdoc_to_comment' => ['ignored_tags' => ['psalm-suppress']],
         'header_comment' => [
             'header' => <<<EOF
  This file is part of the Micro framework package.
