@@ -119,9 +119,9 @@ class AppKernel implements AppKernelInterface
     /**
      * {@inheritDoc}
      */
-    public function addBootLoader(PluginBootLoaderInterface $pluginBootLoader): self
+    public function addBootLoader(PluginBootLoaderInterface $bootLoader): self
     {
-        $this->additionalBootLoaders[] = $pluginBootLoader;
+        $this->additionalBootLoaders[] = $bootLoader;
 
         return $this;
     }
@@ -204,5 +204,12 @@ class AppKernel implements AppKernelInterface
             new DependedPluginsBootLoader($this),
             ...$bl,
         ];
+    }
+
+    public function setBootLoaders(iterable $bootLoaders): KernelInterface
+    {
+        $this->kernel()->setBootLoaders($bootLoaders);
+
+        return $this;
     }
 }

@@ -76,7 +76,7 @@ interface AppKernelInterface extends KernelInterface
     /**
      * @return $this
      */
-    public function addBootLoader(PluginBootLoaderInterface $pluginBootLoader): self;
+    public function addBootLoader(PluginBootLoaderInterface $bootLoader): self;
 
     /**
      * Microkernel\App\Business\Event\Application Terminated Event will be fired.
