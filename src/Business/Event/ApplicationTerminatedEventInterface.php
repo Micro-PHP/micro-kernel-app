@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  *  This file is part of the Micro framework package.
  *
@@ -11,6 +13,11 @@
 
 namespace Micro\Kernel\App\Business\Event;
 
-readonly class ApplicationTerminatedEvent implements ApplicationTerminatedEventInterface
+use Micro\Component\EventEmitter\EventInterface;
+
+/**
+ * @author Stanislau Komar <head.trackingsoft@gmail.com>
+ */
+interface ApplicationTerminatedEventInterface extends EventInterface
 {
 }
