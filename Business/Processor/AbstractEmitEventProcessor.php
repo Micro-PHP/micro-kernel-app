@@ -9,19 +9,16 @@
  *  file that was distributed with this source code.
  */
 
-namespace Micro\Kernel\App\Business\Processor;
+namespace Micro\Framework\KernelApp\Business\Processor;
 
-use Micro\Component\DependencyInjection\Container;
-use Micro\Component\EventEmitter\EventInterface;
-use Micro\Kernel\App\AppKernelInterface;
-use Micro\Kernel\App\Business\KernelActionProcessorInterface;
+use Micro\Framework\DependencyInjection\Container;
+use Micro\Framework\EventEmitter\EventInterface;
+use Micro\Framework\KernelApp\AppKernelInterface;
+use Micro\Framework\KernelApp\Business\KernelActionProcessorInterface;
 use Micro\Plugin\EventEmitter\EventsFacadeInterface;
 
 abstract class AbstractEmitEventProcessor implements KernelActionProcessorInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function process(AppKernelInterface $appKernel): void
     {
         $event = $this->createEvent($appKernel);

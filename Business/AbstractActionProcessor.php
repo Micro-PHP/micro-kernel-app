@@ -9,15 +9,12 @@
  *  file that was distributed with this source code.
  */
 
-namespace Micro\Kernel\App\Business;
+namespace Micro\Framework\KernelApp\Business;
 
-use Micro\Kernel\App\AppKernelInterface;
+use Micro\Framework\KernelApp\AppKernelInterface;
 
 abstract class AbstractActionProcessor implements KernelActionProcessorInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function process(AppKernelInterface $appKernel): void
     {
         foreach ($this->createActionProcessorCollection() as $actionProcessor) {

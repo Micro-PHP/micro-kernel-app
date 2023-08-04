@@ -9,10 +9,10 @@
  *  file that was distributed with this source code.
  */
 
-namespace Micro\Kernel\App\Business;
+namespace Micro\Framework\KernelApp\Business;
 
-use Micro\Kernel\App\Business\Processor\AppCreateEventRunSuccess;
-use Micro\Kernel\App\Business\Processor\ProvideKernelProcessor;
+use Micro\Framework\KernelApp\Business\Processor\AppCreateEventRunSuccess;
+use Micro\Framework\KernelApp\Business\Processor\ProvideKernelProcessor;
 
 class KernelRunActionProcessor extends AbstractActionProcessor
 {

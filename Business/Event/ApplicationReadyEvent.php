@@ -9,9 +9,9 @@
  *  file that was distributed with this source code.
  */
 
-namespace Micro\Kernel\App\Business\Event;
+namespace Micro\Framework\KernelApp\Business\Event;
 
-use Micro\Kernel\App\AppKernelInterface;
+use Micro\Framework\KernelApp\AppKernelInterface;
 
 readonly class ApplicationReadyEvent implements ApplicationReadyEventInterface
 {

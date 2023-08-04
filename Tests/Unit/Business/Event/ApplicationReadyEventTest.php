@@ -11,10 +11,10 @@ declare(strict_types=1);
  *  file that was distributed with this source code.
  */
 
-namespace Micro\Kernel\App\Test\Unit\Business\Event;
+namespace Micro\Framework\KernelApp\Tests\Unit\Business\Event;
 
-use Micro\Kernel\App\AppKernelInterface;
-use Micro\Kernel\App\Business\Event\ApplicationReadyEvent;
+use Micro\Framework\KernelApp\AppKernelInterface;
+use Micro\Framework\KernelApp\Business\Event\ApplicationReadyEvent;
 use PHPUnit\Framework\TestCase;
 
 class ApplicationReadyEventTest extends TestCase

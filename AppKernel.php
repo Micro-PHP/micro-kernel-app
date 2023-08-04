@@ -9,19 +9,19 @@
  *  file that was distributed with this source code.
  */
 
-namespace Micro\Kernel\App;
+namespace Micro\Framework\KernelApp;
 
-use Micro\Component\DependencyInjection\Container;
-use Micro\Framework\Kernel\Boot\ConfigurationProviderBootLoader;
-use Micro\Framework\Kernel\Boot\DependedPluginsBootLoader;
-use Micro\Framework\Kernel\Boot\DependencyProviderBootLoader;
-use Micro\Framework\Kernel\Configuration\ApplicationConfigurationInterface;
+use Micro\Framework\DependencyInjection\Container;
+use Micro\Framework\BootConfiguration\Boot\ConfigurationProviderBootLoader;
+use Micro\Framework\BootPluginDependent\Boot\DependedPluginsBootLoader;
+use Micro\Framework\BootDependency\Boot\DependencyProviderBootLoader;
+use Micro\Framework\BootConfiguration\Configuration\ApplicationConfigurationInterface;
 use Micro\Framework\Kernel\KernelBuilder;
 use Micro\Framework\Kernel\KernelInterface;
 use Micro\Framework\Kernel\Plugin\PluginBootLoaderInterface;
-use Micro\Kernel\App\Business\KernelActionProcessorInterface;
-use Micro\Kernel\App\Business\KernelRunActionProcessor;
-use Micro\Kernel\App\Business\KernelTerminateActionProcessor;
+use Micro\Framework\KernelApp\Business\KernelActionProcessorInterface;
+use Micro\Framework\KernelApp\Business\KernelRunActionProcessor;
+use Micro\Framework\KernelApp\Business\KernelTerminateActionProcessor;
 use Micro\Plugin\EventEmitter\EventEmitterPlugin;
 use Micro\Plugin\Locator\LocatorPlugin;
 

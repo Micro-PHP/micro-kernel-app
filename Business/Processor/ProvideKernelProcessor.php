@@ -9,11 +9,11 @@
  *  file that was distributed with this source code.
  */
 
-namespace Micro\Kernel\App\Business\Processor;
+namespace Micro\Framework\KernelApp\Business\Processor;
 
 use Micro\Framework\Kernel\KernelInterface;
-use Micro\Kernel\App\AppKernelInterface;
-use Micro\Kernel\App\Business\KernelActionProcessorInterface;
+use Micro\Framework\KernelApp\AppKernelInterface;
+use Micro\Framework\KernelApp\Business\KernelActionProcessorInterface;
 
 class ProvideKernelProcessor implements KernelActionProcessorInterface
 {

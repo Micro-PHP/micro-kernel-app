@@ -9,7 +9,7 @@
  *  file that was distributed with this source code.
  */
 
-namespace Micro\Kernel\App;
+namespace Micro\Framework\KernelApp;
 
 use Micro\Framework\Kernel\KernelInterface;
 use Micro\Framework\Kernel\Plugin\PluginBootLoaderInterface;

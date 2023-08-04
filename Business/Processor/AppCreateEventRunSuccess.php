@@ -9,17 +9,14 @@
  *  file that was distributed with this source code.
  */
 
-namespace Micro\Kernel\App\Business\Processor;
+namespace Micro\Framework\KernelApp\Business\Processor;
 
-use Micro\Component\EventEmitter\EventInterface;
-use Micro\Kernel\App\AppKernelInterface;
-use Micro\Kernel\App\Business\Event\ApplicationReadyEvent;
+use Micro\Framework\EventEmitter\EventInterface;
+use Micro\Framework\KernelApp\AppKernelInterface;
+use Micro\Framework\KernelApp\Business\Event\ApplicationReadyEvent;
 
 class AppCreateEventRunSuccess extends AbstractEmitEventProcessor
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function createEvent(AppKernelInterface $appKernel): EventInterface
     {
         return new ApplicationReadyEvent(

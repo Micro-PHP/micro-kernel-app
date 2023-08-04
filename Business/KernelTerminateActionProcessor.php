@@ -9,9 +9,9 @@
  *  file that was distributed with this source code.
  */
 
-namespace Micro\Kernel\App\Business;
+namespace Micro\Framework\KernelApp\Business;
 
-use Micro\Kernel\App\Business\Processor\AppCreateEventTerminate;
+use Micro\Framework\KernelApp\Business\Processor\AppCreateEventTerminate;
 
 class KernelTerminateActionProcessor extends AbstractActionProcessor
 {

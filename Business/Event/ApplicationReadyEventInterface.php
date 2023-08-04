@@ -11,10 +11,10 @@ declare(strict_types=1);
  *  file that was distributed with this source code.
  */
 
-namespace Micro\Kernel\App\Business\Event;
+namespace Micro\Framework\KernelApp\Business\Event;
 
-use Micro\Component\EventEmitter\EventInterface;
-use Micro\Kernel\App\AppKernelInterface;
+use Micro\Framework\EventEmitter\EventInterface;
+use Micro\Framework\KernelApp\AppKernelInterface;
 
 /**
  * @author Stanislau Komar <head.trackingsoft@gmail.com>

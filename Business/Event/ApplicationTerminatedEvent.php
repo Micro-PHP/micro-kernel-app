@@ -9,11 +9,8 @@
  *  file that was distributed with this source code.
  */
 
-namespace Micro\Kernel\App\Business;
+namespace Micro\Framework\KernelApp\Business\Event;
 
-use Micro\Kernel\App\AppKernelInterface;
-
-interface KernelActionProcessorInterface
+readonly class ApplicationTerminatedEvent implements ApplicationTerminatedEventInterface
 {
-    public function process(AppKernelInterface $appKernel): void;
 }

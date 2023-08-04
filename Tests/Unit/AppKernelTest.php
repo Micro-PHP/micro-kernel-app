@@ -11,12 +11,12 @@ declare(strict_types=1);
  *  file that was distributed with this source code.
  */
 
-namespace Micro\Kernel\App\Test\Unit;
+namespace Micro\Framework\KernelApp\Tests\Unit;
 
-use Micro\Component\DependencyInjection\Container;
+use Micro\Framework\DependencyInjection\Container;
 use Micro\Framework\Kernel\KernelInterface;
 use Micro\Framework\Kernel\Plugin\PluginBootLoaderInterface;
-use Micro\Kernel\App\AppKernel;
+use Micro\Framework\KernelApp\AppKernel;
 use PHPUnit\Framework\TestCase;
 
 class AppKernelTest extends TestCase
