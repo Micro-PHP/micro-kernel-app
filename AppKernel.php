@@ -63,9 +63,9 @@ class AppKernel implements AppKernelInterface
     /**
      * {@inheritDoc}
      */
-    public function plugins(string $interfaceInherited = null): \Traversable
+    public function plugins(string $pluginInterface = null): \Traversable
     {
-        return $this->kernel()->plugins($interfaceInherited);
+        return $this->kernel()->plugins($pluginInterface);
     }
 
     /**
@@ -129,9 +129,9 @@ class AppKernel implements AppKernelInterface
     /**
      * {@inheritDoc}
      */
-    public function loadPlugin(string $applicationPluginClass): void
+    public function loadPlugin(string $pluginClass): void
     {
-        $this->kernel()->loadPlugin($applicationPluginClass);
+        $this->kernel()->loadPlugin($pluginClass);
     }
 
     protected function createKernel(): KernelInterface
