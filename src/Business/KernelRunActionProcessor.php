@@ -16,9 +16,6 @@ use Micro\Kernel\App\Business\Processor\ProvideKernelProcessor;
 
 class KernelRunActionProcessor extends AbstractActionProcessor
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function createActionProcessorCollection(): array
     {
         return [

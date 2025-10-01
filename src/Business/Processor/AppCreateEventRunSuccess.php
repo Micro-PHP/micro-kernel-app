@@ -17,9 +17,6 @@ use Micro\Kernel\App\Business\Event\ApplicationReadyEvent;
 
 class AppCreateEventRunSuccess extends AbstractEmitEventProcessor
 {
-    /**
-     * {@inheritDoc}
-     */
     protected function createEvent(AppKernelInterface $appKernel): EventInterface
     {
         return new ApplicationReadyEvent(

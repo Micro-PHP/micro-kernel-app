@@ -11,20 +11,12 @@
     ],
     "require": {
         "micro/deprecation-supports": "^1",
-        "micro/kernel": "^1.6",
+        "micro/kernel": "^1.7",
         "micro/kernel-boot-configuration": "^1",
         "micro/kernel-boot-dependency": "^1",
         "micro/kernel-boot-plugin-depended": "^1",
         "micro/plugin-event-emitter": "^1",
         "micro/plugin-locator": "^1"
-    },
-    "require-dev": {
-        "ergebnis/composer-normalize": "^2.29",
-        "friendsofphp/php-cs-fixer": "^3.13",
-        "phpstan/phpstan": "^1.9",
-        "phpunit/php-code-coverage": "^9.2",
-        "phpunit/phpunit": "^9.5",
-        "vimeo/psalm": "^5.2"
     },
     "autoload": {
         "psr-4": {
@@ -38,7 +30,8 @@
     },
     "config": {
         "allow-plugins": {
-            "ergebnis/composer-normalize": true
+            "ergebnis/composer-normalize": true,
+            "micro/testing-tool": true
         },
         "sort-packages": true
     },
@@ -61,5 +54,8 @@
             "composer normalize",
             "@coverage"
         ]
+    },
+    "require-dev": {
+        "micro/testing-tool": "^1.7"
     }
 }

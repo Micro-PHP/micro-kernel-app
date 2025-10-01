@@ -11,6 +11,7 @@
 
 namespace Micro\Kernel\App\Business\Processor;
 
+use Micro\Component\DependencyInjection\ContainerRegistryInterface;
 use Micro\Framework\Kernel\KernelInterface;
 use Micro\Kernel\App\AppKernelInterface;
 use Micro\Kernel\App\Business\KernelActionProcessorInterface;
@@ -21,7 +22,12 @@ class ProvideKernelProcessor implements KernelActionProcessorInterface
     {
         $callback = fn (): KernelInterface => $appKernel;
 
-        $appKernel->container()->register(AppKernelInterface::class, $callback);
-        $appKernel->container()->register(KernelInterface::class, $callback);
+        $container = $appKernel->container();
+        if (!$container instanceof ContainerRegistryInterface) {
+            return;
+        }
+
+        $container->register(AppKernelInterface::class, $callback);
+        $container->register(KernelInterface::class, $callback);
     }
 }

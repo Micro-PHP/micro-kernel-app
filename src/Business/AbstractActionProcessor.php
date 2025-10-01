@@ -15,9 +15,6 @@ use Micro\Kernel\App\AppKernelInterface;
 
 abstract class AbstractActionProcessor implements KernelActionProcessorInterface
 {
-    /**
-     * {@inheritDoc}
-     */
     public function process(AppKernelInterface $appKernel): void
     {
         foreach ($this->createActionProcessorCollection() as $actionProcessor) {

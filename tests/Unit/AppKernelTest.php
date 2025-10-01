@@ -17,6 +17,7 @@ use Micro\Component\DependencyInjection\Container;
 use Micro\Framework\Kernel\KernelInterface;
 use Micro\Framework\Kernel\Plugin\PluginBootLoaderInterface;
 use Micro\Kernel\App\AppKernel;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class AppKernelTest extends TestCase
@@ -112,9 +113,7 @@ class AppKernelTest extends TestCase
         $this->kernel->terminate();
     }
 
-    /**
-     * @dataProvider dataProviderIsDevMode
-     */
+    #[DataProvider('dataProviderIsDevMode')]
     public function testIsDevMode(string $env, bool $isDev)
     {
         $app = new AppKernel(
@@ -129,15 +128,13 @@ class AppKernelTest extends TestCase
         $this->assertEquals($app->environment(), $env);
     }
 
-    public function dataProviderIsDevMode()
+    public function dataProviderIsDevMode(): array
     {
         return [
             ['dev', true],
-            ['dev-', true],
-            ['devel', true],
-            ['develop', true],
             ['test', false],
-            ['test-dev', false],
+            ['prod', false],
+            ['production', false],
         ];
     }
 }
